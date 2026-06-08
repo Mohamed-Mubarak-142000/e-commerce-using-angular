@@ -13,11 +13,11 @@
 
   <!-- Content -->
   <div class="content">
-    <h3 class="title">{{ title.length > 30 ? (title | slice: 0 : 30) + '...' : title }}</h3>
+    <h3 class="title">{{ title?.length > 30 ? (title | slice: 0 : 30) + '...' : title }}</h3>
 
     <!-- description -->
     <p class="description">
-      {{ description.length > 100 ? (description | slice: 0 : 100) + '...' : description }}
+      {{ description?.length > 100 ? (description | slice: 0 : 100) + '...' : description }}
     </p>
 
     <!-- Rating -->
@@ -29,7 +29,7 @@
 
     <!-- Price -->
     <div class="price-box">
-      <span class="price">{{ price }} EGP</span>
+      <span class="price">{{ price.toFixed(2) }} EGP</span>
 
       <span class="old-price" *ngIf="oldPrice"> {{ oldPrice }} EGP </span>
     </div>

@@ -1,37 +1,39 @@
 import {
   Component,
   Input,
-  CUSTOM_ELEMENTS_SCHEMA,
+  ContentChild,
+  TemplateRef,
   ElementRef,
   ViewChild,
   AfterViewInit,
+  OnChanges,
+  SimpleChanges,
+  CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-slider',
   standalone: true,
-  imports: [CommonModule, MatCardModule],
+  imports: [CommonModule],
   templateUrl: './slider.html',
   styleUrl: './slider.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class SliderComponent implements AfterViewInit {
+export class SliderComponent implements AfterViewInit, OnChanges {
   @Input() items: any[] = [];
 
-  // ===== Options =====
   @Input() slidesPerView = 4;
   @Input() spaceBetween = 20;
   @Input() loop = true;
   @Input() autoplay = false;
   @Input() pagination = true;
 
-  // ===== UI =====
-  @Input() shape: 'circle' | 'square' | 'rounded' = 'rounded';
-  @Input() loading = false;
+  @ContentChild(TemplateRef)
+  itemTemplate!: TemplateRef<any>;
 
-  @ViewChild('swiperRef') swiperRef!: ElementRef;
+  @ViewChild('swiperRef')
+  swiperRef!: ElementRef;
 
   ngAfterViewInit() {
     const swiperEl = this.swiperRef.nativeElement;
@@ -45,40 +47,28 @@ export class SliderComponent implements AfterViewInit {
 
       autoplay: this.autoplay
         ? {
-            delay: 2000,
+            delay: 2500,
             disableOnInteraction: false,
           }
         : false,
-
-      breakpoints: {
-        0: { slidesPerView: 1 },
-        640: { slidesPerView: 2 },
-        768: { slidesPerView: 3 },
-        1024: { slidesPerView: this.slidesPerView },
-      },
     });
 
     swiperEl.initialize();
   }
 
-  // ===== Navigation =====
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['items'] && this.swiperRef?.nativeElement?.swiper) {
+      setTimeout(() => {
+        this.swiperRef.nativeElement.swiper.update();
+      });
+    }
+  }
+
   next() {
     this.swiperRef.nativeElement.swiper.slideNext();
   }
 
   prev() {
     this.swiperRef.nativeElement.swiper.slidePrev();
-  }
-
-  // ===== Card Shape =====
-  getCardClass() {
-    switch (this.shape) {
-      case 'circle':
-        return 'circle-card';
-      case 'square':
-        return 'square-card';
-      default:
-        return 'rounded-card';
-    }
   }
 }

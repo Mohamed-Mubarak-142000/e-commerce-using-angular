@@ -1,27 +1,14 @@
 <div class="slider-wrapper">
-  <!-- Prev Button -->
   <button class="nav-btn left" (click)="prev()">❮</button>
 
-  <swiper-container #swiperRef init="false" class="w-full">
-    @for (item of items; track item.id) {
+  <swiper-container #swiperRef init="false">
+    @for (item of items; track $index) {
       <swiper-slide>
-        <!-- Skeleton -->
-        @if (loading) {
-          <div class="skeleton"></div>
-        } @else {
-          <mat-card [ngClass]="getCardClass()">
-            <img [src]="item.image" loading="lazy" class="card-img" />
-
-            <mat-card-content class="content">
-              <h3>{{ item.title }}</h3>
-              <p>{{ item.description }}</p>
-            </mat-card-content>
-          </mat-card>
-        }
+        <ng-container *ngTemplateOutlet="itemTemplate; context: { $implicit: item }">
+        </ng-container>
       </swiper-slide>
     }
   </swiper-container>
 
-  <!-- Next Button -->
   <button class="nav-btn right" (click)="next()">❯</button>
 </div>

@@ -3,6 +3,15 @@
   [title]="'All Categories'"
   [subtitle]="'Explore our wide range of categories to find the perfect products for you.'"
 />
+
+<!-- Skeleton -->
+@if (CategoryLoading) {
+  <div class="grid">
+    @for (_ of skeletonArray; track $index) {
+      <app-product-card-skeleton />
+    }
+  </div>
+}
 <app-slider
   [items]="categories"
   [slidesPerView]="5"
@@ -11,14 +20,28 @@
   [autoplay]="true"
   [pagination]="false"
   shape="circle"
-  [loading]="false"
-></app-slider>
+>
+  <ng-template let-category>
+    <mat-card class="circle-card">
+      <div class="category-content">
+        <div class="icon-wrapper">
+          <mat-icon>category</mat-icon>
+        </div>
+
+        <span class="category-name">
+          {{ category }}
+        </span>
+      </div>
+    </mat-card>
+  </ng-template>
+</app-slider>
+
 <app-header-section
   [title]="'Featured Products'"
   [subtitle]="'Discover our handpicked selection of featured products that are sure to impress.'"
 />
 <!-- Skeleton -->
-@if (loading) {
+@if (productService.loading()) {
   <div class="grid">
     @for (_ of skeletonArray; track $index) {
       <app-product-card-skeleton />
@@ -27,9 +50,9 @@
 }
 
 <!-- Products -->
-@if (!loading) {
+@if (!productService.loading()) {
   <div class="grid">
-    @for (product of products; track product.id) {
+    @for (product of productService.products(); track product.id) {
       <app-product-card
         [title]="product.title"
         [price]="product.price * (1 - product.discountPercentage / 100)"
@@ -46,3 +69,26 @@
     }
   </div>
 }
+
+<!-- Pagination -->
+<!-- <div class="pagination">
+  <button (click)="productService.prevPage()" [disabled]="productService.page() === 1">Prev</button>
+
+  <span> Page {{ productService.page() }} / {{ productService.totalPages() }} </span>
+
+  <button
+    (click)="productService.nextPage()"
+    [disabled]="productService.page() === productService.totalPages()"
+  >
+    Next
+  </button>
+</div> -->
+<mat-paginator
+  [length]="productService.total()"
+  [pageSize]="productService.limit()"
+  [pageIndex]="productService.page() - 1"
+  [pageSizeOptions]="[5, 10, 25, 100]"
+  (page)="handlePageChange($event)"
+  aria-label="Select page"
+>
+</mat-paginator>
