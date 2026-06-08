@@ -3,3 +3,46 @@
   [title]="'All Categories'"
   [subtitle]="'Explore our wide range of categories to find the perfect products for you.'"
 />
+<app-slider
+  [items]="categories"
+  [slidesPerView]="5"
+  [spaceBetween]="20"
+  [loop]="true"
+  [autoplay]="true"
+  [pagination]="false"
+  shape="circle"
+  [loading]="false"
+></app-slider>
+<app-header-section
+  [title]="'Featured Products'"
+  [subtitle]="'Discover our handpicked selection of featured products that are sure to impress.'"
+/>
+<!-- Skeleton -->
+@if (loading) {
+  <div class="grid">
+    @for (_ of skeletonArray; track $index) {
+      <app-product-card-skeleton />
+    }
+  </div>
+}
+
+<!-- Products -->
+@if (!loading) {
+  <div class="grid">
+    @for (product of products; track product.id) {
+      <app-product-card
+        [title]="product.title"
+        [price]="product.price * (1 - product.discountPercentage / 100)"
+        [oldPrice]="product.price"
+        [rating]="product.rating"
+        [discount]="product.discountPercentage"
+        [image]="product.thumbnail"
+        [description]="product.description"
+        [product]="product"
+        [productId]="product.id"
+        (addToCart)="handleAddToCart(product, $event.quantity)"
+        (addWishlist)="handleAddToWishlist(product)"
+      ></app-product-card>
+    }
+  </div>
+}

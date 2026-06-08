@@ -1,0 +1,9 @@
+<div class="quantity-selector">
+  <button class="qty-btn" (click)="onDecrease()" [disabled]="quantity <= 1">
+    <mat-icon>remove</mat-icon>
+  </button>
+  <span class="qty-display">{{ quantity }}</span>
+  <button class="qty-btn" (click)="onIncrease()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

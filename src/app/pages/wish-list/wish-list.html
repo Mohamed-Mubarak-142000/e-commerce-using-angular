@@ -1,1 +1,53 @@
-<p>wish-list works!</p>
+<!-- Toast Notification -->
+@if (showToast()) {
+  <div class="toast-notification">{{ toastMessage() }}</div>
+}
+
+@if (wishlistService.wishlist().length === 0) {
+  <div class="wishlist-container">
+    <app-empty-state
+      icon="favorite"
+      title="Your Wishlist is Empty"
+      description="Save your favorite products to view them later"
+      buttonText="Continue Shopping"
+      buttonRoute="/products"
+    ></app-empty-state>
+  </div>
+} @else {
+  <div class="wishlist-container">
+    <h1 class="page-title">My Wishlist</h1>
+
+    <!-- Wishlist Grid -->
+    <div class="wishlist-grid">
+      @for (product of wishlistService.wishlist(); track product.id) {
+        <div class="wishlist-item-card">
+          <!-- Product Card -->
+          <div class="product-card-wrapper" (click)="navigateToProduct(product.id)">
+            <app-product-card
+              [product]="product"
+              [title]="product.title"
+              [price]="product.price * (1 - product.discountPercentage / 100)"
+              [oldPrice]="product.price"
+              [image]="product.thumbnail"
+              [rating]="product.rating"
+              [discount]="product.discountPercentage"
+              [description]="product.description"
+              [productId]="product.id"
+            ></app-product-card>
+          </div>
+
+          <!-- Actions -->
+          <div class="wishlist-item-actions">
+            <button class="move-to-cart-btn" (click)="moveToCart(product)">
+              <mat-icon>shopping_cart</mat-icon>
+              Move to Cart
+            </button>
+            <button class="remove-btn" (click)="removeFromWishlist(product.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}

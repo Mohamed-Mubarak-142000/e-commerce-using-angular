@@ -1,1 +1,58 @@
-<p>product-card works!</p>
+<!-- Skeleton Loading -->
+<div *ngIf="isLoading" class="skeleton-card"></div>
+
+<!-- Card -->
+<div *ngIf="!isLoading" class="product-card" (click)="onViewDetails()">
+  <!-- Badge -->
+  <div class="badge" *ngIf="discount">-{{ discount }}%</div>
+
+  <!-- Image -->
+  <div class="image-container">
+    <img [src]="image" [alt]="title" loading="lazy" />
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <h3 class="title">{{ title.length > 30 ? (title | slice: 0 : 30) + '...' : title }}</h3>
+
+    <!-- description -->
+    <p class="description">
+      {{ description.length > 100 ? (description | slice: 0 : 100) + '...' : description }}
+    </p>
+
+    <!-- Rating -->
+    <div class="rating">
+      <span *ngFor="let star of [1, 2, 3, 4, 5]">
+        <i [class.filled]="star <= rating">★</i>
+      </span>
+    </div>
+
+    <!-- Price -->
+    <div class="price-box">
+      <span class="price">{{ price }} EGP</span>
+
+      <span class="old-price" *ngIf="oldPrice"> {{ oldPrice }} EGP </span>
+    </div>
+
+    <!-- Buttons  -->
+    <div class="buttons">
+      <!-- ProductActions component handles conditional display -->
+      <app-product-actions
+        [quantity]="quantity()"
+        (increase)="increaseQty()"
+        (decrease)="decreaseQty()"
+        (addToCart)="onAddToCart()"
+      ></app-product-actions>
+
+      <button
+        class="wishlist-btn"
+        [class.active]="isInWishlist()"
+        (click)="$event.stopPropagation(); onAddWishlist()"
+      >
+        <span class="material-icons heart">{{
+          isInWishlist() ? 'favorite' : 'favorite_border'
+        }}</span>
+      </button>
+    </div>
+  </div>
+</div>

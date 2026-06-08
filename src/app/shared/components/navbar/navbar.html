@@ -50,18 +50,18 @@
     <!-- Right Side -->
     <div class="flex items-center gap-4">
       <!-- Wishlist -->
-      <button class="relative">
+      <button class="relative" (click)="navigateToWishlist()" title="Go to Wishlist">
         <mat-icon>favorite</mat-icon>
         <span class="absolute -top-2 -right-2 text-xs bg-red-500 text-white rounded-full px-1">
-          {{ wishlistCount() }}
+          {{ getWishlistCount() }}
         </span>
       </button>
 
       <!-- Cart -->
-      <button class="relative">
+      <button class="relative" (click)="navigateToCart()" title="Go to Cart">
         <mat-icon>shopping_cart</mat-icon>
         <span class="absolute -top-2 -right-2 text-xs bg-blue-500 text-white rounded-full px-1">
-          {{ cartCount() }}
+          {{ getCartCount() }}
         </span>
       </button>
 

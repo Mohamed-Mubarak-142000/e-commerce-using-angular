@@ -1,1 +1,201 @@
-<p>product-details works!</p>
+@if (loading()) {
+  <div class="loading-container">
+    <div class="spinner"></div>
+  </div>
+} @else if (product()) {
+  <div class="product-details">
+    <!-- Toast Notification -->
+    @if (showToast()) {
+      <div class="toast-notification">{{ toastMessage() }}</div>
+    }
+
+    <!-- Product Details Grid -->
+    <div class="details-grid">
+      <!-- Image Gallery Section -->
+      <div class="image-section">
+        <!-- Main Image -->
+        <div class="main-image">
+          <img [src]="product()!.images[selectedImageIndex()]" [alt]="product()!.title" />
+        </div>
+
+        <!-- Thumbnail Gallery -->
+        <div class="thumbnail-gallery">
+          @for (image of product()!.images; track $index) {
+            <div
+              class="thumbnail"
+              [class.active]="$index === selectedImageIndex()"
+              (click)="selectImage($index)"
+            >
+              <img [src]="image" [alt]="'Thumbnail ' + ($index + 1)" />
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Product Info Section -->
+      <div class="info-section">
+        <!-- Header -->
+        <div class="product-header">
+          <h1 class="product-title">{{ product()!.title }}</h1>
+          <p class="product-brand">Brand: {{ product()!.brand }}</p>
+          <p class="product-category">Category: {{ product()!.category }}</p>
+        </div>
+
+        <!-- Rating -->
+        <div class="rating-section">
+          <div class="stars">
+            @for (star of getRatingArray(5); track star) {
+              <span class="star" [class.filled]="star <= product()!.rating">★</span>
+            }
+          </div>
+          <span class="rating-value">{{ product()!.rating }}/5</span>
+        </div>
+
+        <!-- Price Section -->
+        <div class="price-section">
+          <div class="price-box">
+            <span class="current-price">{{ discountedPrice() | currency: 'EGP' }}</span>
+            <span class="original-price">{{ product()!.price | currency: 'EGP' }}</span>
+            <span class="discount-badge">-{{ product()!.discountPercentage }}%</span>
+          </div>
+        </div>
+
+        <!-- Availability -->
+        <div class="availability">
+          <span class="availability-label">Availability:</span>
+          <span class="availability-status" [class.in-stock]="product()!.stock > 0">
+            {{ product()!.availabilityStatus }}
+          </span>
+          <span class="stock-info">({{ product()!.stock }} in stock)</span>
+        </div>
+
+        <!-- Product Details -->
+        <div class="details-info">
+          <div class="detail-row">
+            <span class="detail-label">SKU:</span>
+            <span class="detail-value">{{ product()!.sku }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Minimum Order:</span>
+            <span class="detail-value">{{ product()!.minimumOrderQuantity }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Weight:</span>
+            <span class="detail-value">{{ product()!.weight }} kg</span>
+          </div>
+          @if (product()!.dimensions) {
+            <div class="detail-row">
+              <span class="detail-label">Dimensions:</span>
+              <span class="detail-value">
+                {{ product()!.dimensions.width }}W x {{ product()!.dimensions.height }}H x
+                {{ product()!.dimensions.depth }}D (cm)
+              </span>
+            </div>
+          }
+        </div>
+
+        <!-- Actions -->
+        <div class="actions-section">
+          <div class="quantity-box">
+            <label>Quantity:</label>
+            <app-quantity-selector
+              [quantity]="quantity()"
+              (increase)="increaseQty()"
+              (decrease)="decreaseQty()"
+            ></app-quantity-selector>
+          </div>
+
+          <button class="add-to-cart-btn" (click)="addToCart()">
+            <mat-icon>shopping_cart</mat-icon>
+            Add to Cart
+          </button>
+
+          <button class="wishlist-btn" [class.active]="isInWishlist()" (click)="toggleWishlist()">
+            <mat-icon>{{ isInWishlist() ? 'favorite' : 'favorite_border' }}</mat-icon>
+            {{ isInWishlist() ? 'Remove from Wishlist' : 'Add to Wishlist' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Info -->
+    <div class="additional-info">
+      @if (product()!.shippingInformation) {
+        <div class="info-box">
+          <h4 class="info-title">
+            <mat-icon>local_shipping</mat-icon>
+            Shipping
+          </h4>
+          <p class="info-content">{{ product()!.shippingInformation }}</p>
+        </div>
+      }
+
+      @if (product()!.warrantyInformation) {
+        <div class="info-box">
+          <h4 class="info-title">
+            <mat-icon>verified</mat-icon>
+            Warranty
+          </h4>
+          <p class="info-content">{{ product()!.warrantyInformation }}</p>
+        </div>
+      }
+
+      @if (product()!.returnPolicy) {
+        <div class="info-box">
+          <h4 class="info-title">
+            <mat-icon>undo</mat-icon>
+            Return Policy
+          </h4>
+          <p class="info-content">{{ product()!.returnPolicy }}</p>
+        </div>
+      }
+    </div>
+
+    <!-- Description Section -->
+    <div class="description-section">
+      <h2>Product Description</h2>
+      <p>{{ product()!.description }}</p>
+    </div>
+
+    <!-- Tags Section -->
+    @if (product()!.tags && product()!.tags.length > 0) {
+      <div class="tags-section">
+        <h3>Tags</h3>
+        <div class="tags">
+          @for (tag of product()!.tags; track tag) {
+            <span class="tag">{{ tag }}</span>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Reviews Section -->
+    @if (product()!.reviews && product()!.reviews.length > 0) {
+      <app-reviews [reviews]="product()!.reviews"></app-reviews>
+    }
+
+    <!-- Related Products Section -->
+    @if (relatedProducts().length > 0) {
+      <div class="related-products">
+        <h2>Related Products</h2>
+        <div class="products-grid">
+          @for (relatedProduct of relatedProducts(); track relatedProduct.id) {
+            <div (click)="navigateToProduct(relatedProduct.id)">
+              <app-product-card
+                [product]="relatedProduct"
+                [title]="relatedProduct.title"
+                [price]="relatedProduct.price * (1 - relatedProduct.discountPercentage / 100)"
+                [oldPrice]="relatedProduct.price"
+                [image]="relatedProduct.thumbnail"
+                [rating]="relatedProduct.rating"
+                [discount]="relatedProduct.discountPercentage"
+                [description]="relatedProduct.description"
+                [productId]="relatedProduct.id"
+              ></app-product-card>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+}

@@ -1,0 +1,30 @@
+<div class="reviews-section">
+  <h3 class="reviews-title">Customer Reviews</h3>
+
+  @if (reviews && reviews.length > 0) {
+    <div class="reviews-list">
+      @for (review of reviews; track review.date) {
+        <div class="review-card">
+          <div class="review-header">
+            <div class="reviewer-info">
+              <h4 class="reviewer-name">{{ review.reviewerName }}</h4>
+              <p class="reviewer-email">{{ review.reviewerEmail }}</p>
+            </div>
+            <span class="review-date">{{ review.date | date: 'short' }}</span>
+          </div>
+
+          <div class="review-rating">
+            @for (star of getRatingArray(5); track star) {
+              <mat-icon class="star" [class.filled]="star <= review.rating">star</mat-icon>
+            }
+            <span class="rating-value">({{ review.rating }}/5)</span>
+          </div>
+
+          <p class="review-comment">{{ review.comment }}</p>
+        </div>
+      }
+    </div>
+  } @else {
+    <p class="no-reviews">No reviews yet</p>
+  }
+</div>
