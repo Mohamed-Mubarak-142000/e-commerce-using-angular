@@ -1,0 +1,15 @@
+<div class="flex items-center justify-center gap-4 mt-6">
+  <mat-divider class="flex-1 max-w-24"></mat-divider>
+  <h2 class="text-3xl md:text-4xl font-bold text-gray-800">
+    {{ title() }}
+  </h2>
+  <mat-divider class="flex-1 max-w-24"></mat-divider>
+</div>
+
+@if (subtitle()) {
+  <div class="flex items-center justify-center gap-4">
+    <p class="mt-3 text-gray-500 max-w-2xl mx-auto">
+      {{ subtitle() }}
+    </p>
+  </div>
+}

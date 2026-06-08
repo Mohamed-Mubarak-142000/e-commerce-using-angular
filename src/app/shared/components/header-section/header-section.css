@@ -1,0 +1,7 @@
+:host {
+  display: block;
+}
+
+mat-divider {
+  border-top-width: 2px;
+}

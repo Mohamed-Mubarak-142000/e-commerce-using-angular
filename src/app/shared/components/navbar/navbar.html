@@ -1,0 +1,90 @@
+<nav
+  class="fixed top-0 left-0 w-full z-50 transition-all duration-300"
+  [class.bg-white]="isScrolled()"
+  [class.shadow-md]="isScrolled()"
+  [class.backdrop-blur]="!isScrolled()"
+>
+  <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+    <!-- Logo -->
+    <a routerLink="/" class="text-xl font-bold flex items-center gap-2">
+      <mat-icon class="text-blue-600">storefront</mat-icon>
+      ShopEase
+    </a>
+
+    <!-- Desktop Links -->
+    <div class="hidden md:flex items-center gap-6 text-gray-700">
+      <a
+        routerLink="/"
+        routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="hover:text-black pb-1"
+      >
+        Home
+      </a>
+
+      <a
+        routerLink="/products"
+        routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+        class="hover:text-black pb-1"
+      >
+        Products
+      </a>
+
+      <a
+        routerLink="/wishlist"
+        routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+        class="hover:text-black pb-1"
+      >
+        Wishlist
+      </a>
+
+      <a
+        routerLink="/cart"
+        routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+        class="hover:text-black pb-1"
+      >
+        Cart
+      </a>
+    </div>
+
+    <!-- Right Side -->
+    <div class="flex items-center gap-4">
+      <!-- Wishlist -->
+      <button class="relative">
+        <mat-icon>favorite</mat-icon>
+        <span class="absolute -top-2 -right-2 text-xs bg-red-500 text-white rounded-full px-1">
+          {{ wishlistCount() }}
+        </span>
+      </button>
+
+      <!-- Cart -->
+      <button class="relative">
+        <mat-icon>shopping_cart</mat-icon>
+        <span class="absolute -top-2 -right-2 text-xs bg-blue-500 text-white rounded-full px-1">
+          {{ cartCount() }}
+        </span>
+      </button>
+
+      <!-- Login -->
+      <button class="bg-blue-600 text-white px-4 py-1 rounded-full hover:bg-blue-700">Login</button>
+
+      <!-- Mobile Menu Button -->
+      <button class="md:hidden" (click)="toggleMenu()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div
+    class="md:hidden bg-white overflow-hidden transition-all duration-300"
+    [style.maxHeight]="isMenuOpen() ? '300px' : '0px'"
+  >
+    <div class="flex flex-col px-7 py-4 gap-3">
+      <a routerLink="/" (click)="toggleMenu()">Home</a>
+      <a routerLink="/products" (click)="toggleMenu()">Products</a>
+      <a routerLink="/wishlist" (click)="toggleMenu()">Wishlist</a>
+      <a routerLink="/cart" (click)="toggleMenu()">Cart</a>
+    </div>
+  </div>
+</nav>
