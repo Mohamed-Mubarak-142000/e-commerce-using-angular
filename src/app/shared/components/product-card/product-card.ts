@@ -64,7 +64,6 @@ export class ProductCard implements OnInit {
   @Output() addWishlist = new EventEmitter<void>();
   onAddWishlist() {
     this.addWishlist.emit();
-    this.showToastMessage('Product added to wishlist!');
   }
 
   isInWishlist() {
@@ -79,14 +78,5 @@ export class ProductCard implements OnInit {
     this.addToCart.emit({
       quantity: qty,
     });
-    this.showToastMessage('Product added to cart!');
-  }
-
-  showToastMessage(message: string) {
-    this.toastMessage.set(message);
-    this.showToast.set(true);
-    setTimeout(() => {
-      this.showToast.set(false);
-    }, 3000);
   }
 }

@@ -2,7 +2,7 @@
 <div *ngIf="isLoading" class="skeleton-card"></div>
 
 <!-- Card -->
-<div *ngIf="!isLoading" class="product-card" (click)="onViewDetails()">
+<div *ngIf="!isLoading" class="product-card">
   <!-- Badge -->
   <div class="badge" *ngIf="discount">-{{ discount }}%</div>
 
@@ -13,7 +13,9 @@
 
   <!-- Content -->
   <div class="content">
-    <h3 class="title">{{ title?.length > 30 ? (title | slice: 0 : 30) + '...' : title }}</h3>
+    <h3 class="title" (click)="onViewDetails()">
+      {{ title?.length > 30 ? (title | slice: 0 : 30) + '...' : title }}
+    </h3>
 
     <!-- description -->
     <p class="description">

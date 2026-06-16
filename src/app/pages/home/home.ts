@@ -50,7 +50,6 @@ export class Home {
   ) {}
 
   ngOnInit() {
-    // 👇 Products
     this.productService.loadProducts();
 
     // 👇 Categories

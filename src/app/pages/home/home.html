@@ -41,7 +41,7 @@
   [subtitle]="'Discover our handpicked selection of featured products that are sure to impress.'"
 />
 <!-- Skeleton -->
-@if (productService.loading()) {
+@if (productService.loading() === 'loading') {
   <div class="grid">
     @for (_ of skeletonArray; track $index) {
       <app-product-card-skeleton />
@@ -50,7 +50,7 @@
 }
 
 <!-- Products -->
-@if (!productService.loading()) {
+@if (productService.loading() !== 'loading') {
   <div class="grid">
     @for (product of productService.products(); track product.id) {
       <app-product-card

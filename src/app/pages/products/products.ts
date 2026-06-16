@@ -1,37 +1,33 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { Router } from '@angular/router';
+
 import { MatSliderModule } from '@angular/material/slider';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+
 import { ProductService } from '../../services/product';
 import { CartService } from '../../services/cart';
 import { WishlistService } from '../../services/wish-list';
-import { Router } from '@angular/router';
 import { CategoryService } from '../../services/category-service';
+import { ToastService } from '../../services/toast-service';
+
 import { Product } from '../../types/product';
-import { MatIconModule } from '@angular/material/icon';
 import { ProductCard } from '../../shared/components/product-card/product-card';
 import { ProductCardSkeleton } from '../../shared/components/product-card-skeleton/product-card-skeleton';
-import { ToastService } from '../../services/toast-service';
-import { Toast } from '../../shared/components/toast/toast';
+
 @Component({
   selector: 'app-products',
+  standalone: true,
   imports: [
     CommonModule,
-    MatSidenavModule,
-    MatCardModule,
-    MatSliderModule,
-    MatCheckboxModule,
-    MatSelectModule,
-    MatPaginatorModule,
-    MatIconModule,
-    MatCardModule,
     ProductCard,
     ProductCardSkeleton,
-    Toast,
+    MatSliderModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatPaginatorModule,
   ],
   templateUrl: './products.html',
   styleUrl: './products.css',
@@ -40,8 +36,10 @@ export class Products {
   productService = inject(ProductService);
 
   categories = signal<string[]>([]);
-  loading = true;
   CategoryLoading = true;
+
+  showAllCategories = signal(false);
+
   skeletonArray = Array.from({ length: 8 });
 
   constructor(
@@ -56,45 +54,57 @@ export class Products {
     this.productService.loadProducts();
 
     this.categoryService.getCategories().subscribe({
-      next: (response) => {
-        this.categories.set(response);
+      next: (res) => {
+        this.categories.set(res);
         this.CategoryLoading = false;
       },
-      error: (error) => {
-        console.error('Error fetching categories:', error);
-        this.CategoryLoading = false;
-      },
+      error: () => (this.CategoryLoading = false),
     });
   }
-
-  showAllCategories = signal(false);
 
   visibleCategories = computed(() =>
     this.showAllCategories() ? this.categories() : this.categories().slice(0, 5),
   );
 
-  toggleCategories() {
-    this.showAllCategories.update((value) => !value);
+  // ================= INPUTS =================
+  onSearch(event: Event) {
+    this.productService.setSearch((event.target as HTMLInputElement).value);
   }
 
-  handleAddToCart(product: Product, quantity: number = 1) {
+  onPriceChange(event: any) {
+    this.productService.setPrice(Number(event.target.value));
+  }
+
+  onCategoryToggle(cat: string) {
+    this.productService.toggleCategory(cat);
+  }
+
+  onSortChange(value: string) {
+    this.productService.setSort(value);
+  }
+
+  toggleCategories() {
+    this.showAllCategories.update((v) => !v);
+  }
+
+  // ================= ACTIONS =================
+  handleAddToCart(product: Product, quantity: number) {
     this.cartService.addToCart(product, quantity);
-    this.toastService.show('Product added to cart!');
+    this.toastService.show('Added to cart');
   }
 
   handleAddToWishlist(product: Product) {
     this.wishlistService.toggle(product);
-    this.toastService.show('Product added to wishlist!');
-  }
-
-  handleViewDetails(product: Product) {
-    this.router.navigate(['/products', product.id]);
+    this.toastService.show('Added to wishlist');
   }
 
   handlePageChange(event: PageEvent) {
     this.productService.limit.set(event.pageSize);
     this.productService.page.set(event.pageIndex + 1);
-
     this.productService.loadProducts();
+  }
+
+  handleViewDetails(product: Product) {
+    this.router.navigate(['/products', product.id]);
   }
 }
