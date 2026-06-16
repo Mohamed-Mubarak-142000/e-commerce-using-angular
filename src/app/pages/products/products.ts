@@ -15,6 +15,8 @@ import { Product } from '../../types/product';
 import { MatIconModule } from '@angular/material/icon';
 import { ProductCard } from '../../shared/components/product-card/product-card';
 import { ProductCardSkeleton } from '../../shared/components/product-card-skeleton/product-card-skeleton';
+import { ToastService } from '../../services/toast-service';
+import { Toast } from '../../shared/components/toast/toast';
 @Component({
   selector: 'app-products',
   imports: [
@@ -29,6 +31,7 @@ import { ProductCardSkeleton } from '../../shared/components/product-card-skelet
     MatCardModule,
     ProductCard,
     ProductCardSkeleton,
+    Toast,
   ],
   templateUrl: './products.html',
   styleUrl: './products.css',
@@ -46,6 +49,7 @@ export class Products {
     public wishlistService: WishlistService,
     private router: Router,
     private categoryService: CategoryService,
+    private toastService: ToastService,
   ) {}
 
   ngOnInit() {
@@ -75,10 +79,12 @@ export class Products {
 
   handleAddToCart(product: Product, quantity: number = 1) {
     this.cartService.addToCart(product, quantity);
+    this.toastService.show('Product added to cart!');
   }
 
   handleAddToWishlist(product: Product) {
     this.wishlistService.toggle(product);
+    this.toastService.show('Product added to wishlist!');
   }
 
   handleViewDetails(product: Product) {

@@ -1,1 +1,154 @@
-<p>register works!</p>
+<div class="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-10">
+  <div class="w-full max-w-6xl bg-white rounded-3xl shadow-xl overflow-hidden grid lg:grid-cols-2">
+    <!-- Left Side -->
+    <div
+      class="hidden lg:flex flex-col justify-center bg-gradient-to-br from-indigo-600 to-purple-700 text-white p-12"
+    >
+      <h1 class="text-5xl font-bold mb-6">Join Us 🚀</h1>
+
+      <p class="text-lg opacity-90 leading-8">
+        Create your account and start shopping from thousands of products with a smooth and secure
+        experience.
+      </p>
+
+      <img
+        src="https://images.unsplash.com/photo-1556740749-887f6717d7e4"
+        alt="Register"
+        class="mt-10 rounded-2xl object-cover h-72"
+      />
+    </div>
+
+    <!-- Right Side -->
+    <div class="p-6 sm:p-10 lg:p-14">
+      <div class="max-w-md mx-auto">
+        <h2 class="text-3xl font-bold text-gray-900 mb-2">Create Account</h2>
+
+        <p class="text-gray-500 mb-8">Fill the information below</p>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
+          <!-- Names -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <mat-form-field appearance="outline">
+              <mat-label>First Name</mat-label>
+
+              <input matInput formControlName="firstName" />
+
+              @if (firstName.touched && firstName.hasError('required')) {
+                <mat-error> First name is required </mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Last Name</mat-label>
+
+              <input matInput formControlName="lastName" />
+
+              @if (lastName.touched && lastName.hasError('required')) {
+                <mat-error> Last name is required </mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <!-- Email -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Email</mat-label>
+
+            <input matInput type="email" formControlName="email" />
+
+            @if (email.touched && email.hasError('required')) {
+              <mat-error> Email is required </mat-error>
+            }
+
+            @if (email.touched && email.hasError('email')) {
+              <mat-error> Invalid email format </mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Password -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Password</mat-label>
+
+            <input
+              matInput
+              formControlName="password"
+              [type]="hidePassword() ? 'password' : 'text'"
+            />
+
+            <button mat-icon-button matSuffix type="button" (click)="togglePassword()">
+              <mat-icon>
+                {{ hidePassword() ? 'visibility' : 'visibility_off' }}
+              </mat-icon>
+            </button>
+
+            @if (password.touched && password.hasError('required')) {
+              <mat-error> Password is required </mat-error>
+            }
+
+            @if (password.touched && password.hasError('minlength')) {
+              <mat-error> Minimum 8 characters </mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Confirm Password -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Confirm Password</mat-label>
+
+            <input
+              matInput
+              formControlName="confirmPassword"
+              [type]="hideConfirmPassword() ? 'password' : 'text'"
+            />
+
+            <button mat-icon-button matSuffix type="button" (click)="toggleConfirmPassword()">
+              <mat-icon>
+                {{ hideConfirmPassword() ? 'visibility' : 'visibility_off' }}
+              </mat-icon>
+            </button>
+
+            @if (confirmPassword.touched && confirmPassword.hasError('required')) {
+              <mat-error> Confirm password is required </mat-error>
+            }
+          </mat-form-field>
+
+          @if (registerForm.hasError('passwordMismatch')) {
+            <p class="text-red-500 text-sm">Passwords do not match</p>
+          }
+
+          <!-- Submit -->
+          <button mat-raised-button color="primary" class="!w-full !h-12" [disabled]="loading()">
+            @if (!loading()) {
+              Create Account
+            } @else {
+              Creating Account...
+            }
+          </button>
+
+          <!-- Divider -->
+          <div class="flex items-center gap-3 py-2">
+            <div class="flex-1 h-px bg-gray-200"></div>
+
+            <span class="text-gray-400 text-sm"> OR </span>
+
+            <div class="flex-1 h-px bg-gray-200"></div>
+          </div>
+
+          <!-- Google -->
+          <button
+            type="button"
+            class="w-full border rounded-xl py-3 font-medium hover:bg-gray-50 transition"
+          >
+            Continue with Google
+          </button>
+
+          <p class="text-center text-gray-500">
+            Already have an account?
+
+            <a routerLink="/login" class="text-indigo-600 font-semibold hover:underline">
+              Sign In
+            </a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

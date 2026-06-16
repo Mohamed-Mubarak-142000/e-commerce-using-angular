@@ -1,7 +1,5 @@
 <!-- Toast Notification -->
-@if (showToast()) {
-  <div class="toast-notification">{{ toastMessage() }}</div>
-}
+<app-toast />
 
 @if (wishlistService.wishlist().length === 0) {
   <div class="wishlist-container">

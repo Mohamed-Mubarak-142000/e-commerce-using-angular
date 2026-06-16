@@ -40,6 +40,7 @@ export class Home {
   loading = true;
   CategoryLoading = true;
   skeletonArray = Array.from({ length: 8 });
+  skeletonCategories = Array.from({ length: 4 });
 
   constructor(
     public cartService: CartService,

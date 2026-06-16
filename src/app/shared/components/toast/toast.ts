@@ -9,6 +9,6 @@ import { ToastService } from '../../../services/toast-service';
   templateUrl: './toast.html',
   styleUrls: ['./toast.css'],
 })
-export class ToastComponent {
+export class Toast {
   constructor(public toast: ToastService) {}
 }

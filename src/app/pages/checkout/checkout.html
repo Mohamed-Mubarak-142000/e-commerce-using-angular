@@ -1,0 +1,126 @@
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-8">Checkout</h1>
+
+  <div class="grid lg:grid-cols-3 gap-8">
+    <!-- Form -->
+    <div class="lg:col-span-2">
+      <form [formGroup]="checkoutForm" class="space-y-6">
+        <div class="bg-white rounded-2xl shadow p-6">
+          <h2 class="text-xl font-semibold mb-5">Customer Information</h2>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <mat-form-field appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="firstName" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input matInput formControlName="lastName" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Phone</mat-label>
+              <input matInput formControlName="phone" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-6">
+          <h2 class="text-xl font-semibold mb-5">Shipping Address</h2>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Country</mat-label>
+              <input matInput formControlName="country" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>City</mat-label>
+              <input matInput formControlName="city" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="md:col-span-2">
+              <mat-label>Address</mat-label>
+              <input matInput formControlName="address" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Postal Code</mat-label>
+              <input matInput formControlName="postalCode" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-6">
+          <h2 class="text-xl font-semibold mb-5">Payment Method</h2>
+
+          <mat-radio-group formControlName="paymentMethod" class="flex flex-col gap-3">
+            <mat-radio-button value="cash"> Cash On Delivery </mat-radio-button>
+
+            <mat-radio-button value="card"> Credit Card </mat-radio-button>
+
+            <mat-radio-button value="paypal"> PayPal </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </form>
+    </div>
+
+    <!-- Summary -->
+    <div>
+      <div class="bg-white rounded-2xl shadow p-6 sticky top-24">
+        <h2 class="text-xl font-semibold mb-5">Order Summary</h2>
+
+        <div class="space-y-4">
+          @for (item of cartService.cart(); track item.product.id) {
+            <div class="flex items-center justify-between">
+              <div>
+                <h4 class="font-medium">
+                  {{ item.product.title }}
+                </h4>
+
+                <span class="text-sm text-gray-500"> Qty: {{ item.quantity }} </span>
+              </div>
+
+              <span>
+                $
+                {{ (item.product.price * item.quantity).toFixed(2) }}
+              </span>
+            </div>
+          }
+        </div>
+
+        <mat-divider class="my-4"></mat-divider>
+
+        <div class="flex justify-between mb-2">
+          <span>Subtotal</span>
+          <span>${{ subtotal().toFixed(2) }}</span>
+        </div>
+
+        <div class="flex justify-between mb-2">
+          <span>Shipping</span>
+          <span>${{ shipping().toFixed(2) }}</span>
+        </div>
+
+        <div class="flex justify-between text-lg font-bold mt-4">
+          <span>Total</span>
+          <span>${{ total().toFixed(2) }}</span>
+        </div>
+
+        <button
+          mat-raised-button
+          color="primary"
+          class="!w-full !mt-6 !h-12"
+          (click)="placeOrder()"
+        >
+          Place Order
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

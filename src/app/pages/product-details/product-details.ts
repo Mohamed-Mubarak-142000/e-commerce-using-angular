@@ -9,11 +9,20 @@ import { WishlistService } from '../../services/wish-list';
 import { ProductCard } from '../../shared/components/product-card/product-card';
 import { ReviewsComponent } from '../../shared/components/reviews/reviews';
 import { QuantitySelectorComponent } from '../../shared/components/quantity-selector/quantity-selector';
+import { ToastService } from '../../services/toast-service';
+import { Toast } from '../../shared/components/toast/toast';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, MatIconModule, ProductCard, ReviewsComponent, QuantitySelectorComponent],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    Toast,
+    ProductCard,
+    ReviewsComponent,
+    QuantitySelectorComponent,
+  ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.css',
 })
@@ -23,8 +32,6 @@ export class ProductDetails implements OnInit {
   loading = signal(true);
   selectedImageIndex = signal(0);
   quantity = signal(1);
-  showToast = signal(false);
-  toastMessage = signal('');
 
   constructor(
     private route: ActivatedRoute,
@@ -32,6 +39,7 @@ export class ProductDetails implements OnInit {
     private productService: ProductService,
     public cartService: CartService,
     public wishlistService: WishlistService,
+    private toastService: ToastService,
   ) {}
 
   ngOnInit() {
@@ -86,11 +94,13 @@ export class ProductDetails implements OnInit {
 
   increaseQty() {
     this.quantity.update((q) => q + 1);
+    this.toastService.show('Quantity increased by 1');
   }
 
   decreaseQty() {
     if (this.quantity() > 1) {
       this.quantity.update((q) => q - 1);
+      this.toastService.show('Quantity decreased by 1');
     }
   }
 
@@ -98,7 +108,7 @@ export class ProductDetails implements OnInit {
     const prod = this.product();
     if (prod) {
       this.cartService.addToCart(prod, this.quantity());
-      this.showToastMessage('Added to cart!');
+      this.toastService.show('Added to cart!');
     }
   }
 
@@ -107,7 +117,7 @@ export class ProductDetails implements OnInit {
     if (prod) {
       this.wishlistService.toggle(prod);
       const inWishlist = this.wishlistService.wishlist().some((p) => p.id === prod.id);
-      this.showToastMessage(inWishlist ? 'Added to wishlist!' : 'Removed from wishlist!');
+      this.toastService.show(inWishlist ? 'Added to wishlist!' : 'Removed from wishlist!');
     }
   }
 
@@ -116,14 +126,6 @@ export class ProductDetails implements OnInit {
     if (!prod) return false;
     return this.wishlistService.wishlist().some((p) => p.id === prod.id);
   });
-
-  showToastMessage(message: string) {
-    this.toastMessage.set(message);
-    this.showToast.set(true);
-    setTimeout(() => {
-      this.showToast.set(false);
-    }, 3000);
-  }
 
   navigateToProduct(productId: number) {
     this.router.navigate(['/product', productId]);

@@ -1,1 +1,110 @@
-<p>login works!</p>
+<div class="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-10">
+  <div class="w-full max-w-6xl bg-white rounded-3xl shadow-xl overflow-hidden grid lg:grid-cols-2">
+    <!-- Left Side -->
+    <div
+      class="hidden lg:flex flex-col justify-center bg-gradient-to-br from-indigo-600 to-purple-700 text-white p-12"
+    >
+      <h1 class="text-5xl font-bold mb-6">Welcome Back 👋</h1>
+
+      <p class="text-lg opacity-90 leading-8">
+        Sign in to access your account, manage your orders, wishlist and shopping experience.
+      </p>
+
+      <img
+        src="https://images.unsplash.com/photo-1556740749-887f6717d7e4"
+        alt="Login"
+        class="mt-10 rounded-2xl object-cover h-72"
+      />
+    </div>
+
+    <!-- Right Side -->
+    <div class="p-6 sm:p-10 lg:p-14">
+      <div class="max-w-md mx-auto">
+        <h2 class="text-3xl font-bold text-gray-900 mb-2">Login</h2>
+
+        <p class="text-gray-500 mb-8">Please sign in to your account</p>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
+          <!-- UserName -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Username</mat-label>
+
+            <input matInput type="text" formControlName="username" />
+
+            @if (username.touched && username.hasError('required')) {
+              <mat-error>Username is required</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Password -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Password</mat-label>
+
+            <input
+              matInput
+              formControlName="password"
+              [type]="hidePassword() ? 'password' : 'text'"
+            />
+
+            <button mat-icon-button matSuffix type="button" (click)="togglePassword()">
+              <mat-icon>
+                {{ hidePassword() ? 'visibility' : 'visibility_off' }}
+              </mat-icon>
+            </button>
+
+            @if (password.touched && password.hasError('required')) {
+              <mat-error>Password is required</mat-error>
+            }
+
+            @if (password.touched && password.hasError('minlength')) {
+              <mat-error> Password must be at least 6 characters </mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Remember Me -->
+          <div class="flex items-center justify-between">
+            <mat-checkbox formControlName="rememberMe"> Remember me </mat-checkbox>
+
+            <a routerLink="/forgot-password" class="text-indigo-600 hover:underline">
+              Forgot Password?
+            </a>
+          </div>
+
+          <!-- Login Button -->
+          <button mat-raised-button color="primary" class="!w-full !h-12" [disabled]="loading()">
+            @if (!loading()) {
+              Login
+            } @else {
+              Signing In...
+            }
+          </button>
+
+          <!-- Divider -->
+          <div class="flex items-center gap-3 py-2">
+            <div class="flex-1 h-px bg-gray-200"></div>
+
+            <span class="text-gray-400 text-sm"> OR </span>
+
+            <div class="flex-1 h-px bg-gray-200"></div>
+          </div>
+
+          <!-- Social Login -->
+          <button
+            type="button"
+            class="w-full border rounded-xl py-3 font-medium hover:bg-gray-50 transition"
+          >
+            Continue with Google
+          </button>
+
+          <p class="text-center text-gray-500 mt-4">
+            Don't have an account?
+
+            <a routerLink="/register" class="text-indigo-600 font-semibold hover:underline">
+              Sign Up
+            </a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

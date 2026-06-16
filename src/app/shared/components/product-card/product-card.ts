@@ -15,6 +15,8 @@ import { WishlistService } from '../../../services/wish-list';
 })
 export class ProductCard implements OnInit {
   quantity = signal(0);
+  showToast = signal(false);
+  toastMessage = signal('');
   constructor(
     private router: Router,
     public cartService: CartService,
@@ -62,19 +64,29 @@ export class ProductCard implements OnInit {
   @Output() addWishlist = new EventEmitter<void>();
   onAddWishlist() {
     this.addWishlist.emit();
+    this.showToastMessage('Product added to wishlist!');
   }
 
   isInWishlist() {
-    return this.wishlistService.wishlist().some((p) => p.id === this.product?.id);
+    return this.wishlistService.wishlist().some((item) => item.id === this.productId);
   }
 
   @Output() addToCart = new EventEmitter<{ quantity: number }>();
   onAddToCart() {
     const qty = this.quantity() + 1;
     this.quantity.set(qty);
-    this.cartService.addToCart(this.product, 1);
+    // this.cartService.addToCart(this.product, 1);
     this.addToCart.emit({
       quantity: qty,
     });
+    this.showToastMessage('Product added to cart!');
+  }
+
+  showToastMessage(message: string) {
+    this.toastMessage.set(message);
+    this.showToast.set(true);
+    setTimeout(() => {
+      this.showToast.set(false);
+    }, 3000);
   }
 }

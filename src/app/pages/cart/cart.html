@@ -108,7 +108,7 @@
             <span class="summary-value">{{ cartService.cartTotal() | currency: 'EGP' }}</span>
           </div>
 
-          <button class="checkout-btn">Proceed to Checkout</button>
+          <button (click)="proceedToCheckout()" class="checkout-btn">Proceed to Checkout</button>
 
           <a routerLink="/products" class="continue-shopping-link"> Continue Shopping </a>
         </div>
@@ -116,3 +116,6 @@
     </div>
   </div>
 }
+
+<!-- Toast Notification -->
+<app-toast />

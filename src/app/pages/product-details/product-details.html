@@ -5,9 +5,7 @@
 } @else if (product()) {
   <div class="product-details">
     <!-- Toast Notification -->
-    @if (showToast()) {
-      <div class="toast-notification">{{ toastMessage() }}</div>
-    }
+    <app-toast />
 
     <!-- Product Details Grid -->
     <div class="details-grid">

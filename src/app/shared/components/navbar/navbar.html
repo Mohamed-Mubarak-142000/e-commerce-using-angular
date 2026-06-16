@@ -65,8 +65,22 @@
         </span>
       </button>
 
-      <!-- Login -->
-      <button class="bg-blue-600 text-white px-4 py-1 rounded-full hover:bg-blue-700">Login</button>
+      @if (isLoggedIn()) {
+        <button
+          (click)="navigateToProfile()"
+          class="bg-green-600 text-white px-4 py-1 rounded-full"
+        >
+          {{ user()?.username }}
+        </button>
+
+        <button (click)="logout()" class="ml-2 bg-red-400 px-4 py-1 rounded-xl text-white">
+          Logout
+        </button>
+      } @else {
+        <button (click)="navigateToLogin()" class="bg-blue-600 text-white px-4 py-1 rounded-full">
+          Login
+        </button>
+      }
 
       <!-- Mobile Menu Button -->
       <button class="md:hidden" (click)="toggleMenu()">
