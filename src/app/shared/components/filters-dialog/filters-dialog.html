@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>Filters</h2>
+
+<div mat-dialog-content>
+  <!-- SEARCH -->
+  <input
+    type="text"
+    placeholder="Search..."
+    (input)="onSearch($event)"
+    class="w-full p-2 border rounded mb-4"
+  />
+
+  <!-- CATEGORIES -->
+  <h3 class="font-medium mb-2">Categories</h3>
+
+  @if (CategoryLoading) {
+    <p>Loading...</p>
+  } @else {
+    <div class="flex flex-wrap gap-2">
+      @for (cat of visibleCategories(); track cat) {
+        <button
+          (click)="onCategoryToggle(cat)"
+          class="px-3 py-1 rounded-full border"
+          [class.bg-blue-500]="productService.categories().includes(cat)"
+          [class.text-white]="productService.categories().includes(cat)"
+        >
+          {{ cat }}
+        </button>
+      }
+    </div>
+  }
+
+  <h3 class="mt-4">Price: {{ productService.maxPrice() }} $</h3>
+
+  <mat-slider min="0" max="5000">
+    <input matSliderThumb [value]="productService.maxPrice()" (input)="onPriceChange($event)" />
+  </mat-slider>
+
+  <h3 class="mt-4 font-medium">Sort</h3>
+
+  <mat-select class="w-full" (selectionChange)="onSortChange($event.value)">
+    <mat-option value="priceAsc"> Price Low → High </mat-option>
+
+    <mat-option value="priceDesc"> Price High → Low </mat-option>
+
+    <mat-option value="rating"> Rating </mat-option>
+  </mat-select>
+</div>

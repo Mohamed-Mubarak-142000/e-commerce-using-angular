@@ -50,32 +50,32 @@
 }
 
 <!-- Products -->
-@if (productService.loading() !== 'loading') {
-  <div class="grid">
-    @for (product of productService.products(); track product.id) {
-      <app-product-card
-        [title]="product.title"
-        [price]="product.price * (1 - product.discountPercentage / 100)"
-        [oldPrice]="product.price"
-        [rating]="product.rating"
-        [discount]="product.discountPercentage"
-        [image]="product.thumbnail"
-        [description]="product.description"
-        [product]="product"
-        [productId]="product.id"
-        (addToCart)="handleAddToCart(product, $event.quantity)"
-        (addWishlist)="handleAddToWishlist(product)"
-      ></app-product-card>
-    }
-  </div>
-}
+<div class="products-container">
+  @for (product of productService.products(); track product.id) {
+    <app-product-card
+      [title]="product.title"
+      [price]="product.price * (1 - product.discountPercentage / 100)"
+      [oldPrice]="product.price"
+      [rating]="product.rating"
+      [discount]="product.discountPercentage"
+      [image]="product.thumbnail"
+      [description]="product.description"
+      [product]="product"
+      [productId]="product.id"
+      (addToCart)="handleAddToCart(product, $event.quantity)"
+      (addWishlist)="handleAddToWishlist(product)"
+    ></app-product-card>
+  }
+</div>
 
-<mat-paginator
-  [length]="productService.total()"
-  [pageSize]="productService.limit()"
-  [pageIndex]="productService.page() - 1"
-  [pageSizeOptions]="[5, 10, 25, 100]"
-  (page)="handlePageChange($event)"
-  aria-label="Select page"
->
-</mat-paginator>
+<div class="container-paginator">
+  <mat-paginator
+    [length]="productService.total()"
+    [pageSize]="productService.limit()"
+    [pageIndex]="productService.page() - 1"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    (page)="handlePageChange($event)"
+    aria-label="Select page"
+  >
+  </mat-paginator>
+</div>

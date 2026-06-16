@@ -48,9 +48,9 @@
     </div>
 
     <!-- Right Side -->
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-3">
       <!-- Wishlist -->
-      <button class="relative" (click)="navigateToWishlist()" title="Go to Wishlist">
+      <button class="relative" (click)="navigateToWishlist()">
         <mat-icon>favorite</mat-icon>
         <span class="absolute -top-2 -right-2 text-xs bg-red-500 text-white rounded-full px-1">
           {{ getWishlistCount() }}
@@ -58,29 +58,32 @@
       </button>
 
       <!-- Cart -->
-      <button class="relative" (click)="navigateToCart()" title="Go to Cart">
+      <button class="relative" (click)="navigateToCart()">
         <mat-icon>shopping_cart</mat-icon>
         <span class="absolute -top-2 -right-2 text-xs bg-blue-500 text-white rounded-full px-1">
           {{ getCartCount() }}
         </span>
       </button>
 
-      @if (isLoggedIn()) {
-        <button
-          (click)="navigateToProfile()"
-          class="bg-green-600 text-white px-4 py-1 rounded-full"
-        >
-          {{ user()?.username }}
-        </button>
+      <!-- Desktop Auth -->
+      <div class="hidden md:flex items-center gap-2">
+        @if (isLoggedIn()) {
+          <button
+            (click)="navigateToProfile()"
+            class="bg-green-600 text-white px-4 py-1 rounded-full"
+          >
+            {{ user()?.username }}
+          </button>
 
-        <button (click)="logout()" class="ml-2 bg-red-400 px-4 py-1 rounded-xl text-white">
-          Logout
-        </button>
-      } @else {
-        <button (click)="navigateToLogin()" class="bg-blue-600 text-white px-4 py-1 rounded-full">
-          Login
-        </button>
-      }
+          <button (click)="logout()" class="bg-red-400 px-4 py-1 rounded-xl text-white">
+            Logout
+          </button>
+        } @else {
+          <button (click)="navigateToLogin()" class="bg-blue-600 text-white px-4 py-1 rounded-full">
+            Login
+          </button>
+        }
+      </div>
 
       <!-- Mobile Menu Button -->
       <button class="md:hidden" (click)="toggleMenu()">
@@ -92,13 +95,28 @@
   <!-- Mobile Menu -->
   <div
     class="md:hidden bg-white overflow-hidden transition-all duration-300"
-    [style.maxHeight]="isMenuOpen() ? '300px' : '0px'"
+    [style.maxHeight]="isMenuOpen() ? '400px' : '0px'"
   >
     <div class="flex flex-col px-7 py-4 gap-3">
       <a routerLink="/" (click)="toggleMenu()">Home</a>
       <a routerLink="/products" (click)="toggleMenu()">Products</a>
       <a routerLink="/wishlist" (click)="toggleMenu()">Wishlist</a>
       <a routerLink="/cart" (click)="toggleMenu()">Cart</a>
+
+      <!-- Mobile Auth -->
+      <div class="border-t pt-3 mt-3 flex flex-col gap-2">
+        @if (isLoggedIn()) {
+          <button (click)="navigateToProfile(); toggleMenu()" class="text-left">
+            {{ user()?.username }}
+          </button>
+
+          <button (click)="logout(); toggleMenu()" class="text-left text-red-500">Logout</button>
+        } @else {
+          <button (click)="navigateToLogin(); toggleMenu()" class="text-left text-blue-600">
+            Login
+          </button>
+        }
+      </div>
     </div>
   </div>
 </nav>

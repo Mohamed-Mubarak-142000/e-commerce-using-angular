@@ -1,9 +1,45 @@
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+.products-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* 👈 ده اللي بيخليها في النص */
+  gap: 16px;
   margin-top: 20px;
 }
+
+/* Desktop */
+.product-item {
+  flex: 1 1 calc(25% - 16px); /* 4 items */
+  max-width: 280px;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .product-item {
+    flex: 1 1 calc(33.33% - 16px);
+  }
+}
+
+/* Small tablet */
+@media (max-width: 768px) {
+  .product-item {
+    flex: 1 1 calc(50% - 16px);
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .product-item {
+    flex: 1 1 100%;
+  }
+}
+
+.container-paginator {
+  margin-top: 10px;
+}
+
+/* =========================
+   CATEGORY CIRCLE CARD
+========================= */
 .circle-card {
   width: 140px;
   height: 140px;
@@ -20,6 +56,25 @@
   transform: translateY(-5px);
 }
 
+/* Tablet */
+@media (max-width: 768px) {
+  .circle-card {
+    width: 110px;
+    height: 110px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .circle-card {
+    width: 90px;
+    height: 90px;
+  }
+}
+
+/* =========================
+   CATEGORY CONTENT
+========================= */
 .category-content {
   display: flex;
   flex-direction: column;
@@ -45,7 +100,22 @@
 }
 
 .category-name {
-  font-size: 14px;
+  font-size: clamp(11px, 1.2vw, 14px);
   font-weight: 600;
-  line-height: 1.3;
+  text-align: center;
+}
+
+/* Mobile text fix */
+@media (max-width: 480px) {
+  .category-name {
+    font-size: 12px;
+  }
+}
+
+/* =========================
+   SPACING FIX
+========================= */
+app-slider {
+  display: block;
+  margin-bottom: 30px;
 }
