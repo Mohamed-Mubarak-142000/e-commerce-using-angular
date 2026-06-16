@@ -1,1 +1,123 @@
-<p>products works!</p>
+<div class="flex flex-col lg:flex-row gap-6 p-4">
+  <!-- Sidebar -->
+  <aside class="w-full lg:w-64 bg-white rounded-xl shadow-md p-4 h-fit sticky top-24">
+    <h2 class="text-xl font-semibold mb-4">Filters</h2>
+
+    <!-- Categories -->
+    <div class="mb-6">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="font-medium">
+          Categories
+
+          @if (!CategoryLoading) {
+            <span class="ml-1 text-xs bg-gray-100 px-2 py-1 rounded-full text-gray-600">
+              {{ categories().length }}
+            </span>
+          }
+        </h3>
+      </div>
+
+      @if (CategoryLoading) {
+        <div class="space-y-3">
+          @for (item of [1, 2, 3, 4, 5]; track item) {
+            <div class="flex items-center gap-3">
+              <div class="w-4 h-4 rounded bg-gray-200 animate-pulse"></div>
+
+              <div class="h-4 flex-1 rounded bg-gray-200 animate-pulse"></div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="flex flex-col">
+          @for (category of visibleCategories(); track category) {
+            <mat-checkbox>
+              {{ category }}
+            </mat-checkbox>
+          }
+
+          @if (categories().length > 5) {
+            <button
+              type="button"
+              class="mt-2 flex items-center gap-1 text-primary font-medium text-sm"
+              (click)="toggleCategories()"
+            >
+              {{ showAllCategories() ? 'Show Less' : 'Show More' }}
+
+              <mat-icon>
+                {{ showAllCategories() ? 'expand_less' : 'expand_more' }}
+              </mat-icon>
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Price -->
+    <div class="mb-6">
+      <h3 class="font-medium mb-2">Price Range</h3>
+
+      <mat-slider min="0" max="5000">
+        <input matSliderThumb />
+      </mat-slider>
+    </div>
+
+    <!-- Sorting -->
+    <div>
+      <h3 class="font-medium mb-2">Sort By</h3>
+
+      <mat-select>
+        <mat-option value="priceAsc"> Price Low to High </mat-option>
+
+        <mat-option value="priceDesc"> Price High to Low </mat-option>
+
+        <mat-option value="rating"> Rating </mat-option>
+
+        <mat-option value="newest"> Newest </mat-option>
+      </mat-select>
+    </div>
+  </aside>
+
+  <!-- Products Content -->
+  <section class="flex-1">
+    <!-- Results -->
+    <!-- Skeleton -->
+    @if (productService.loading()) {
+      <div class="grid">
+        @for (_ of skeletonArray; track $index) {
+          <app-product-card-skeleton />
+        }
+      </div>
+    }
+
+    <!-- Products -->
+    @if (!productService.loading()) {
+      <div class="grid">
+        @for (product of productService.products(); track product.id) {
+          <app-product-card
+            [title]="product.title"
+            [price]="product.price * (1 - product.discountPercentage / 100)"
+            [oldPrice]="product.price"
+            [rating]="product.rating"
+            [discount]="product.discountPercentage"
+            [image]="product.thumbnail"
+            [description]="product.description"
+            [product]="product"
+            [productId]="product.id"
+            (addToCart)="handleAddToCart(product, $event.quantity)"
+            (addWishlist)="handleAddToWishlist(product)"
+          ></app-product-card>
+        }
+      </div>
+    }
+    <!-- Pagination -->
+    <mat-paginator
+      [length]="productService.total()"
+      [pageSize]="productService.limit()"
+      [pageIndex]="productService.page() - 1"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      (page)="handlePageChange($event)"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+  </section>
+</div>

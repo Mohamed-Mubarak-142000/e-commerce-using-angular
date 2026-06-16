@@ -70,19 +70,6 @@
   </div>
 }
 
-<!-- Pagination -->
-<!-- <div class="pagination">
-  <button (click)="productService.prevPage()" [disabled]="productService.page() === 1">Prev</button>
-
-  <span> Page {{ productService.page() }} / {{ productService.totalPages() }} </span>
-
-  <button
-    (click)="productService.nextPage()"
-    [disabled]="productService.page() === productService.totalPages()"
-  >
-    Next
-  </button>
-</div> -->
 <mat-paginator
   [length]="productService.total()"
   [pageSize]="productService.limit()"
